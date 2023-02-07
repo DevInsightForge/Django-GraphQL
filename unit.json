@@ -1,0 +1,35 @@
+{
+  "listeners": {
+    "*:8000": {
+      "pass": "routes"
+    }
+  },
+  "routes": [
+    {
+      "match": {
+        "uri": [
+          "/static/*",
+          "/media/*"
+        ]
+      },
+      "action": {
+        "share": "/code/"
+      }
+    },
+    {
+      "action": {
+        "pass": "applications/django"
+      }
+    }
+  ],
+  "applications": {
+    "django": {
+      "type": "python",
+      "path": "/code",
+      "module": "core.wsgi",
+      "environment": {
+        "ON_PRODUCTION": "True"
+      }
+    }
+  }
+}
