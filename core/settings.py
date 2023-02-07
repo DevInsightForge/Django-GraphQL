@@ -31,7 +31,7 @@ DB_HOST = config("DB_HOST", default="localhost")
 DEBUG = config("DEBUG", default=True, cast=bool)
 
 # Hosts allowed for project
-ALLOWED_HOSTS = ["*"] if DEBUG else [".vercel.app"]
+ALLOWED_HOSTS = ["*"]
 
 # Django built-in apps
 DJANGO_APPS = [
