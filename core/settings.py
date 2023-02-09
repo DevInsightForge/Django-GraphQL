@@ -19,6 +19,7 @@ MEDIA_DIR = BASE_DIR.joinpath("media")
 # Environment configurations
 SECRET_KEY = config("SECRET_KEY", default=get_random_secret_key())
 ON_PRODUCTION = config("ON_PRODUCTION", default=False, cast=bool)
+FORCE_SCRIPT_NAME = config("SUB_LOCATION", default="/")
 
 # Database configurations
 DB_ENGINE = config("DB_ENGINE", default="postgresql")
@@ -79,7 +80,9 @@ MIDDLEWARE = DJANGO_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE
 ROOT_URLCONF = "core.urls"
 WSGI_APPLICATION = "core.wsgi.application"
 if ON_PRODUCTION:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+if FORCE_SCRIPT_NAME != "/":
+    USE_X_FORWARDED_HOST = True
 
 # Authentication Definition
 AUTH_USER_MODEL = "account.User"
@@ -162,11 +165,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Media files
-MEDIA_URL = "/media/"
+MEDIA_URL = "media/"
 MEDIA_ROOT = MEDIA_DIR
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 if ON_PRODUCTION:
     STATIC_ROOT = STATIC_DIR
 else:
