@@ -8,13 +8,12 @@ django = "*"
 django-cleanup = "*"
 django-cors-headers = "*"
 django-graphql-jwt = "*"
-django-phonenumber-field = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 graphene-django = "*"
 graphene-django-cud = "*"
 graphene-file-upload = "*"
 python-decouple = "*"
 pillow = "*"
-
 psycopg2 =  { version = "2.9.5", sys_platform = "== 'win32'" }
 psycopg2-binary =  { version = "2.9.5", sys_platform = "!= 'win32'" }
 

@@ -2,8 +2,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
+from graphql_jwt.refresh_token.models import RefreshToken
 
-from account.models import User
+from account.models import User, UserRefreshToken
 
 
 class CustomUserAdmin(UserAdmin):
@@ -80,7 +81,11 @@ class CustomUserAdmin(UserAdmin):
     ordering = ("-date_joined",)
 
 
+# Register admin models
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(UserRefreshToken)
+
 
 # Removing groups from admin
 admin.site.unregister(Group)
+admin.site.unregister(RefreshToken)

@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from graphql_jwt.refresh_token.models import RefreshToken as AbstractRefreshToken
+from phonenumber_field.modelfields import PhoneNumberField
 
 from account.manager import CustomUserManager
 
@@ -26,8 +28,8 @@ class User(AbstractUser):
     avatar = models.ImageField(
         upload_to="avatars/%Y/%m/%d", verbose_name="Avatar Image", blank=True, null=True
     )
-    phone_number = models.CharField(
-        max_length=50, verbose_name="Phone Number", blank=True, null=True
+    phone_number = PhoneNumberField(
+        max_length=20, verbose_name="Phone Number", blank=True, null=True
     )
     birth_date = models.DateField(verbose_name="Birth Date", blank=True, null=True)
 
@@ -36,3 +38,9 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ["-date_joined"]
+
+
+class UserRefreshToken(AbstractRefreshToken):
+    class Meta:
+        proxy = True
+        verbose_name = "Refresh Token"

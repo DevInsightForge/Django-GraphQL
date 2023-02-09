@@ -48,6 +48,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "corsheaders",
     "graphene_django",
+    "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "django_cleanup.apps.CleanupConfig",
 ]
 
@@ -144,12 +145,15 @@ GRAPHENE = {
 # GRAPHQL_JWT definition
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    "JWT_REUSE_REFRESH_TOKENS": True,
     "JWT_EXPIRATION_DELTA": timedelta(hours=1),
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
     "JWT_HIDE_TOKEN_FIELDS": True,
     "JWT_COOKIE_SECURE": bool(ON_PRODUCTION),
     "JWT_COOKIE_SAMESITE": "Lax",
     "JWT_COOKIE_NAME": "__jwt",
+    "JWT_REFRESH_TOKEN_COOKIE_NAME": "__refresh",
 }
 
 # CORS Definitions
