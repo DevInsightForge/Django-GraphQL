@@ -13,4 +13,9 @@ from django.core.asgi import get_asgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
-application = get_asgi_application()
+django_app = get_asgi_application()
+
+# Wait for django to load before import
+from luna_ws import add_ws_app
+
+application = add_ws_app(django_app)

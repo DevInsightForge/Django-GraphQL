@@ -23,7 +23,7 @@
     "django": {
       "type": "python",
       "path": "/code",
-      "module": "core.wsgi",
+      "module": "core.asgi",
       "environment": {
         "ON_PRODUCTION": "True"
       }
