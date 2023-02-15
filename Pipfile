@@ -4,18 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-django-cleanup = "*"
-django-cors-headers = "*"
-django-graphql-jwt = "*"
-django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
-graphene-django = "*"
-graphene-django-cud = "*"
-graphene-file-upload = "*"
-python-decouple = "*"
-pillow = "*"
-psycopg2 =  { version = "2.9.5", sys_platform = "== 'win32'" }
-psycopg2-binary =  { version = "2.9.5", sys_platform = "!= 'win32'" }
+django = "==4.1.6"
+django-cleanup = "==6.0.0"
+django-cors-headers = "==3.13.0"
+django-graphql-jwt = "==0.3.4"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "==7.0.2"}
+graphene-django = "==3.0.0"
+graphene-django-cud = "==0.10.0"
+graphene-file-upload = "==1.3.0"
+python-decouple = "==3.7"
+pillow = "==9.4.0"
+psycopg2 =  { version = "==2.9.5", sys_platform = "== 'win32'" }
+psycopg2-binary =  { version = "==2.9.5", sys_platform = "!= 'win32'" }
 
 [dev-packages]
 black = "*"
