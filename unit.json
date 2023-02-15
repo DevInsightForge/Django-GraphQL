@@ -28,5 +28,9 @@
         "ON_PRODUCTION": "True"
       }
     }
+  },
+  "access_log": {
+    "path": "/dev/stdout",
+    "format": "[$time_local] \"$request_line\" $status $body_bytes_sent \"$header_referer\""
   }
 }
