@@ -172,11 +172,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Media files
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = MEDIA_DIR
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 if ON_PRODUCTION:
     STATIC_ROOT = STATIC_DIR
 else:
