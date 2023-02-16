@@ -19,7 +19,7 @@ MEDIA_DIR = BASE_DIR.joinpath("media")
 # Environment configurations
 SECRET_KEY = config("SECRET_KEY", default=get_random_secret_key())
 ON_PRODUCTION = config("ON_PRODUCTION", default=False, cast=bool)
-FORCE_SCRIPT_NAME = config("SUB_LOCATION", default="/")
+FORCE_SCRIPT_NAME = config("SUB_LOCATION", default="")
 
 # Database configurations
 DB_ENGINE = config("DB_ENGINE", default="postgresql")
@@ -46,6 +46,7 @@ DJANGO_APPS = [
 
 # Third Party apps
 THIRD_PARTY_APPS = [
+    "daphne",
     "corsheaders",
     "graphene_django",
     "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
@@ -72,18 +73,23 @@ THIRD_PARTY_MIDDLEWARE = [
 ]
 
 # Application definition
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS + DJANGO_APPS
 
 # Middleware Definition
-MIDDLEWARE = DJANGO_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE
+MIDDLEWARE = THIRD_PARTY_MIDDLEWARE + DJANGO_MIDDLEWARE
 
 # Module definition
 ROOT_URLCONF = "core.urls"
 WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = "core.asgi.application"
+
 if ON_PRODUCTION:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-if FORCE_SCRIPT_NAME != "/":
+if FORCE_SCRIPT_NAME != "":
     USE_X_FORWARDED_HOST = True
+
+
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 # Authentication Definition
 AUTH_USER_MODEL = "account.User"
@@ -137,6 +143,7 @@ else:
 # Graphene Definitions
 GRAPHENE = {
     "SCHEMA": "core.schema.RootSchema",
+    "SUBSCRIPTION_PATH": "/ws/",
     "MIDDLEWARE": [
         "graphql_jwt.middleware.JSONWebTokenMiddleware",
     ],
@@ -169,11 +176,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Media files
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = MEDIA_DIR
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 if ON_PRODUCTION:
     STATIC_ROOT = STATIC_DIR
 else:

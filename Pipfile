@@ -16,6 +16,7 @@ python-decouple = "==3.7"
 pillow = "==9.4.0"
 psycopg2 =  { version = "==2.9.5", sys_platform = "== 'win32'" }
 psycopg2-binary =  { version = "==2.9.5", sys_platform = "!= 'win32'" }
+channels = {version = "==4.0.0", extras = ["daphne"]}
 
 [dev-packages]
 black = "*"
