@@ -150,8 +150,9 @@ GRAPHQL_JWT = {
     "JWT_EXPIRATION_DELTA": timedelta(hours=1),
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
     "JWT_HIDE_TOKEN_FIELDS": True,
-    "JWT_COOKIE_SECURE": bool(ON_PRODUCTION),
-    "JWT_COOKIE_SAMESITE": "Lax",
+    # "JWT_COOKIE_SECURE": bool(ON_PRODUCTION),
+    "JWT_COOKIE_SECURE": True,
+    "JWT_COOKIE_SAMESITE": "None",
     "JWT_COOKIE_NAME": "__jwt",
     "JWT_REFRESH_TOKEN_COOKIE_NAME": "__refresh",
 }

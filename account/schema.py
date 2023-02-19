@@ -11,11 +11,16 @@ from account.types import UserType
 # Auth Definitions
 class AuthQuery(graphene.ObjectType):
 
-    user = graphene.Field(UserType, id=graphene.ID(default_value=None))
+    user = graphene.Field(
+        UserType,
+        user_id=graphene.ID(default_value=None),
+        description="Get user information by using user's ID. Defaults to self.",
+    )
+    users = graphene.List(UserType, description="Get all user's information")
 
     @login_required
     def resolve_user(self, info, **kwargs):
-        user_id = kwargs["id"]
+        user_id = kwargs["user_id"]
         if user_id is None:
             return info.context.user
         if not info.context.user.is_staff or not info.context.user.is_superuser:
@@ -25,10 +30,14 @@ class AuthQuery(graphene.ObjectType):
         except User.DoesNotExist as e:
             raise GraphQLError(f"No user not found with id {user_id}!") from e
 
+    @login_required
+    def resolve_users(self, info, **kwargs):
+        if not info.context.user.is_staff or not info.context.user.is_superuser:
+            raise GraphQLError("You do not have permission to view other users")
+        return User.objects.all()
+
 
 # Mutations
-
-
 class AuthMutation(graphene.ObjectType):
     sign_up = CreateUserMutation.Field(
         description="Register user and obtain new JWT Token"
