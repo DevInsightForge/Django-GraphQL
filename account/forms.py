@@ -9,9 +9,4 @@ class SignupForm(UserCreationForm):
             "email",
             "password1",
             "password2",
-            # "first_name",
-            # "last_name",
-            # "avatar",
-            # "birth_date",
-            # "phone_number",
         )

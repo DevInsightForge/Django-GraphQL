@@ -117,16 +117,17 @@ class UserInformationModel(models.Model):
         null=True,
     )
 
+    class GenderChoices(models.TextChoices):
+        male = "male", _("Male")
+        female = "female", _("Female")
+        other = "other", _("Other")
+
     gender = models.CharField(
         _("choose gender"),
-        max_length=30,
+        max_length=10,
         blank=True,
         null=True,
-        choices=(
-            ("male", "Male"),
-            ("female", "Female"),
-            ("other", "Other"),
-        ),
+        choices=GenderChoices.choices,
     )
 
     created_at = models.DateTimeField(

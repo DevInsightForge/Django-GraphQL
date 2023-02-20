@@ -4,12 +4,12 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from account.models import User
-from account.mutations import CreateUserMutation
+from account.mutations import CreateUserMutation, UserInformationMutation
 from account.types import UserType
 
 
 # Auth Definitions
-class AuthQuery(graphene.ObjectType):
+class AccountQuery(graphene.ObjectType):
 
     user = graphene.Field(
         UserType,
@@ -22,7 +22,7 @@ class AuthQuery(graphene.ObjectType):
     def resolve_user(self, info, **kwargs):
         user_id = kwargs["user_id"]
         if user_id is None:
-            return info.context.user
+            return User.objects.get(id=info.context.user.id)
         if not info.context.user.is_staff or not info.context.user.is_superuser:
             raise GraphQLError("You do not have permission to view other users")
         try:
@@ -38,7 +38,7 @@ class AuthQuery(graphene.ObjectType):
 
 
 # Mutations
-class AuthMutation(graphene.ObjectType):
+class AccountMutation(graphene.ObjectType):
     sign_up = CreateUserMutation.Field(
         description="Register user and obtain new JWT Token"
     )
@@ -47,3 +47,7 @@ class AuthMutation(graphene.ObjectType):
         description="Revoke a JWT Token"
     )
     refresh = graphql_jwt.Refresh.Field(description="Obtain Refresh JWT Token")
+
+    update_user_information = UserInformationMutation.Field(
+        description="Add information for user"
+    )

@@ -1,13 +1,13 @@
 import graphene
-from account.schema import AuthMutation, AuthQuery
+from account.schema import AccountMutation, AccountQuery
 
 
 # Root Schema Definitions
-class Query(AuthQuery, graphene.ObjectType):
+class Query(AccountQuery, graphene.ObjectType):
     pass
 
 
-class Mutation(AuthMutation, graphene.ObjectType):
+class Mutation(AccountMutation, graphene.ObjectType):
     pass
 
 
