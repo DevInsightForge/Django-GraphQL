@@ -13,7 +13,7 @@ class AuthQuery(graphene.ObjectType):
 
     user = graphene.Field(
         UserType,
-        user_id=graphene.ID(default_value=None),
+        user_id=graphene.UUID(default_value=None),
         description="Get user information by using user's ID. Defaults to self.",
     )
     users = graphene.List(UserType, description="Get all user's information")

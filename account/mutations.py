@@ -16,9 +16,9 @@ class CreateUserMutation(ObtainJSONWebTokenMixin, DjangoCreateMutation):
         model = User
         fields = (
             "email",
-            "first_name",
-            "last_name",
-            "avatar",
+            # "first_name",
+            # "last_name",
+            # "avatar",
         )
         custom_fields = {
             "password1": graphene.String(required=True),

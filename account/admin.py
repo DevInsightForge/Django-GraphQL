@@ -1,4 +1,3 @@
-# src/users/admin.py
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
@@ -41,20 +40,20 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
-        (
-            "User Information",
-            {
-                "fields": (
-                    "first_name",
-                    "last_name",
-                    "avatar",
-                    "birth_date",
-                    "phone_number",
-                    "date_joined",
-                    "last_login",
-                )
-            },
-        ),
+        # (
+        #     "User Information",
+        #     {
+        #         "fields": (
+        #             "first_name",
+        #             "last_name",
+        #             "avatar",
+        #             "birth_date",
+        #             "phone_number",
+        #             "date_joined",
+        #             "last_login",
+        #         )
+        #     },
+        # ),
         ("User Permissions", {"fields": ("is_superuser", "is_staff", "is_active")}),
     )
     add_fieldsets = (
@@ -66,11 +65,11 @@ class CustomUserAdmin(UserAdmin):
                     "email",
                     "password1",
                     "password2",
-                    "first_name",
-                    "last_name",
-                    "avatar",
-                    "birth_date",
-                    "phone_number",
+                    # "first_name",
+                    # "last_name",
+                    # "avatar",
+                    # "birth_date",
+                    # "phone_number",
                     "is_staff",
                     "is_active",
                 ),
