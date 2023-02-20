@@ -1,54 +1,69 @@
 from uuid import uuid4
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now as tz_now
 from graphql_jwt.refresh_token.models import RefreshToken as AbstractRefreshToken
 from phonenumber_field.modelfields import PhoneNumberField
 
 from account.manager import CustomUserManager
 
 
-class User(AbstractUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     Custom user model
     """
 
     id = models.UUIDField(
-        _("Id"),
+        _("id"),
         primary_key=True,
         default=uuid4,
     )
 
     email = models.EmailField(
-        _("Email Address"),
+        _("email address"),
         unique=True,
         help_text=_("Email address which acts as unique identifier."),
         error_messages={
-            "unique": _("A user with that email already exists."),
+            "unique": _("A user with this email already exists."),
         },
+    )
+
+    date_joined = models.DateTimeField(
+        _("date joined"),
+        auto_now_add=True,
+    )
+
+    last_login = models.DateTimeField(
+        _("last login"),
+        auto_now=True,
+    )
+
+    is_superuser = models.BooleanField(
+        _("superuser status"),
+        default=False,
+        help_text=_("Designates whether the user has superuser permissions."),
+    )
+
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
+
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
     )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-    username = None
     objects = CustomUserManager()
-
-    # email = models.EmailField(
-    #     _("Email Address"),
-    #     unique=True,
-    #     error_messages={
-    #         "unique": _("A user with that email already exists."),
-    #     },
-    # )
-
-    # avatar = models.ImageField(
-    #     upload_to="avatars/%Y/%m/%d", verbose_name="Avatar Image", blank=True, null=True
-    # )
-    # phone_number = PhoneNumberField(
-    #     max_length=20, verbose_name="Phone Number", blank=True, null=True
-    # )
-    # birth_date = models.DateField(verbose_name="Birth Date", blank=True, null=True)
 
     class Meta:
         verbose_name = _("User")
@@ -61,7 +76,83 @@ class User(AbstractUser):
         self.email = self.__class__.objects.normalize_email(self.email)
 
 
+class UserInformationModel(models.Model):
+    """
+    Model to store user basic information
+    """
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="informations",
+    )
+
+    first_name = models.CharField(
+        _("first name"),
+        max_length=254,
+    )
+
+    last_name = models.CharField(
+        _("last name"),
+        max_length=254,
+    )
+
+    phone_number = PhoneNumberField(
+        _("phone number"),
+        max_length=50,
+        blank=True,
+        null=True,
+    )
+
+    avatar = models.ImageField(
+        _("avatar image"),
+        upload_to="avatars/%Y/%m/%d",
+        blank=True,
+        null=True,
+    )
+
+    birth_date = models.DateField(
+        _("birth date"),
+        blank=True,
+        null=True,
+    )
+
+    gender = models.CharField(
+        _("choose gender"),
+        max_length=30,
+        blank=True,
+        null=True,
+        choices=(
+            ("male", "Male"),
+            ("female", "Female"),
+            ("other", "Other"),
+        ),
+    )
+
+    created_at = models.DateTimeField(
+        _("created at"),
+        auto_now_add=True,
+        editable=False,
+    )
+
+    updated_at = models.DateTimeField(
+        _("updated at"),
+        auto_now=True,
+        editable=False,
+    )
+
+    class Meta:
+        verbose_name = _("User Information")
+
+    def __str__(self):
+        return f"{self.user}'s informations"
+
+
 class UserRefreshToken(AbstractRefreshToken):
+    """
+    Proxy model for refresh token
+    """
+
     class Meta:
         proxy = True
         verbose_name = "Refresh Token"

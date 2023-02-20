@@ -3,11 +3,14 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from graphql_jwt.refresh_token.models import RefreshToken
 
-from account.models import User, UserRefreshToken
+from account.models import User, UserInformationModel, UserRefreshToken
 
 
 class CustomUserAdmin(UserAdmin):
     model = User
+    search_fields = ("email",)
+    ordering = ("-date_joined",)
+
     list_display = (
         "id",
         "email",
@@ -15,6 +18,7 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_active",
     )
+
     list_display_links = (
         "id",
         "email",
@@ -25,11 +29,13 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_active",
     )
+
     readonly_fields = (
         "is_superuser",
         "date_joined",
         "last_login",
     )
+
     fieldsets = (
         (
             "Login Information",
@@ -40,48 +46,95 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
-        # (
-        #     "User Information",
-        #     {
-        #         "fields": (
-        #             "first_name",
-        #             "last_name",
-        #             "avatar",
-        #             "birth_date",
-        #             "phone_number",
-        #             "date_joined",
-        #             "last_login",
-        #         )
-        #     },
-        # ),
-        ("User Permissions", {"fields": ("is_superuser", "is_staff", "is_active")}),
+        (
+            "User Permissions",
+            {
+                "fields": ("is_superuser", "is_staff", "is_active"),
+            },
+        ),
     )
+
     add_fieldsets = (
         (
-            None,
+            "Register Information",
             {
                 "classes": ("wide",),
                 "fields": (
                     "email",
                     "password1",
                     "password2",
-                    # "first_name",
-                    # "last_name",
-                    # "avatar",
-                    # "birth_date",
-                    # "phone_number",
-                    "is_staff",
-                    "is_active",
                 ),
             },
         ),
+        (
+            "User Permissions",
+            {
+                "classes": ("wide",),
+                "fields": ("is_staff", "is_active"),
+            },
+        ),
     )
-    search_fields = ("email",)
-    ordering = ("-date_joined",)
+
+
+class UserInformationsAdmin(admin.ModelAdmin):
+    model = UserInformationModel
+    search_fields = ("user",)
+    ordering = ("-created_at",)
+
+    list_display = (
+        "id",
+        "user",
+        "first_name",
+        "last_name",
+        "created_at",
+    )
+
+    list_display_links = (
+        "id",
+        "user",
+    )
+
+    list_filter = (
+        "user",
+        "first_name",
+        "last_name",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "user",
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
+        (
+            "User Informations",
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "avatar",
+                    "phone_number",
+                    "birth_date",
+                    "gender",
+                )
+            },
+        ),
+    )
 
 
 # Register admin models
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(UserInformationModel, UserInformationsAdmin)
 admin.site.register(UserRefreshToken)
 
 
