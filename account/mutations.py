@@ -1,5 +1,5 @@
 import graphene
-from django.db import transaction
+from graphql_jwt.settings import jwt_settings
 from django.contrib.auth import get_user_model
 from graphene_django_cud.mutations.create import DjangoCreateMutation
 from account.models import User, UserInformationModel
@@ -80,3 +80,23 @@ class UserInformationMutation(DjangoCreateMutation):
             return cls(**return_data)
         except Exception as e:
             raise ValueError(e) from e
+
+
+class DeleteTokenCookie(graphene.Mutation):
+    deleted = graphene.Boolean(required=True)
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, **kwargs):
+        context = info.context
+        context.delete_jwt_cookie = (
+            jwt_settings.JWT_COOKIE_NAME in context.COOKIES
+            and getattr(context, "jwt_cookie", False)
+        )
+        context.delete_refresh_token_cookie = (
+            jwt_settings.JWT_REFRESH_TOKEN_COOKIE_NAME in context.COOKIES
+            and getattr(context, "jwt_cookie", False)
+        )
+        return cls(
+            deleted=context.delete_jwt_cookie and context.delete_refresh_token_cookie
+        )
