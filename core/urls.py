@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from graphene_file_upload.django import FileUploadGraphQLView as GraphQLView
+from core.views import GraphQLView
 from graphql_jwt.decorators import jwt_cookie
 
 urlpatterns = [
