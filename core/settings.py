@@ -153,8 +153,8 @@ GRAPHQL_JWT = {
     # "JWT_COOKIE_SECURE": bool(ON_PRODUCTION),
     "JWT_COOKIE_SECURE": True,
     "JWT_COOKIE_SAMESITE": "None",
-    "JWT_COOKIE_NAME": "__jwt",
-    "JWT_REFRESH_TOKEN_COOKIE_NAME": "__refresh",
+    "JWT_COOKIE_NAME": "__a_t",
+    "JWT_REFRESH_TOKEN_COOKIE_NAME": "__r_t",
 }
 
 # CORS Definitions
