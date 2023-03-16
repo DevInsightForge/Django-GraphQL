@@ -14,8 +14,7 @@ graphene-django-cud = "==0.10.0"
 graphene-file-upload = "==1.3.0"
 python-decouple = "==3.7"
 pillow = "==9.4.0"
-psycopg2 =  { version = "==2.9.5", sys_platform = "== 'win32'" }
-psycopg2-binary =  { version = "==2.9.5", sys_platform = "!= 'win32'" }
+psycopg2-binary = "==2.9.5"
 
 [dev-packages]
 black = "*"
