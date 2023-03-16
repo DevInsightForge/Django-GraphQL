@@ -66,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name = _("User")
-        ordering = ["-date_joined"]
+        ordering = ["-email"]
 
     def __str__(self) -> str:
         return self.email
