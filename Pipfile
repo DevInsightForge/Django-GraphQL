@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==4.2"
+django-cleanup = "==7.0.0"
+django-cors-headers = "==3.14.0"
+graphene-django = "==3.0.0"
+python-decouple = "==3.8"
+
+[dev-packages]
+black = "*"
+
+[requires]
+python_version = "3.11"
