@@ -22,11 +22,11 @@ ON_PRODUCTION = config("ON_PRODUCTION", default=False, cast=bool)
 
 
 # Database configurations
-DB_ENGINE = config("DB_ENGINE", default="mysql")
-DB_NAME = config("DB_NAME", default="dbname")
-DB_USER = config("DB_USER", default="user")
-DB_PASSWORD = config("DB_PASSWORD", default="password")
-DB_HOST = config("DB_HOST", default="localhost")
+DB_ENGINE = config("DB_ENGINE", default="sqlite3")
+DB_NAME = config("DB_NAME", default=BASE_DIR / "db.sqlite3")
+DB_USER = config("DB_USER", default="")
+DB_PASSWORD = config("DB_PASSWORD", default="")
+DB_HOST = config("DB_HOST", default="")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -115,20 +115,15 @@ TEMPLATES = [
 
 
 # Database Definitions
-PRODUCTION_DATABASE = {
-    "ENGINE": f"django.db.backends.{DB_ENGINE}",
-    "NAME": DB_NAME,
-    "USER": DB_USER,
-    "PASSWORD": DB_PASSWORD,
-    "HOST": DB_HOST,
+DATABASES = {
+    "default": {
+        "ENGINE": f"django.db.backends.{DB_ENGINE}",
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASSWORD,
+        "HOST": DB_HOST,
+    }
 }
-
-LOCAL_DATABASE = {
-    "ENGINE": "django.db.backends.sqlite3",
-    "NAME": BASE_DIR / "db.sqlite3",
-}
-
-DATABASES = {"default": PRODUCTION_DATABASE if ON_PRODUCTION else LOCAL_DATABASE}
 
 
 # Authentication Definition
