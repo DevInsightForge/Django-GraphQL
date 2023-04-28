@@ -7,6 +7,7 @@ from django.core.management.utils import get_random_secret_key
 
 from decouple import config
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,7 +56,9 @@ THIRD_PARTY_APPS = [
 
 
 # local django apps
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "account",
+]
 
 
 # Django built-in middleware
@@ -128,7 +131,12 @@ LOCAL_DATABASE = {
 DATABASES = {"default": PRODUCTION_DATABASE if ON_PRODUCTION else LOCAL_DATABASE}
 
 
-# Password validation
+# Authentication Definition
+AUTH_USER_MODEL = "account.User"
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -178,5 +186,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Graphene definitions
 GRAPHENE = {
-    "SCHEMA": "core.schema.schema",
+    "SCHEMA": "core.schema.RootSchema",
+    "MIDDLEWARE": [
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
+    ],
+}
+
+
+# GRAPHQL_JWT definition
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_EXPIRATION_DELTA": timedelta(hours=1),
+    # "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
+    # "JWT_HIDE_TOKEN_FIELDS": True,
+    # "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    # "JWT_REUSE_REFRESH_TOKENS": True,
+    # "JWT_COOKIE_SECURE": bool(ON_PRODUCTION),
+    # "JWT_COOKIE_SECURE": True,
+    # "JWT_COOKIE_SAMESITE": "None",
+    # "JWT_COOKIE_NAME": "__a_t",
+    # "JWT_REFRESH_TOKEN_COOKIE_NAME": "__r_t",
 }

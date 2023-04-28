@@ -1,8 +1,17 @@
 import graphene
+from account.schema import AccountMutation, AccountQuery
 
 
-class Query(graphene.ObjectType):
-    hello = graphene.String(default_value="Hi!")
+# Root Schema Definitions
+class Query(AccountQuery, graphene.ObjectType):
+    pass
 
 
-schema = graphene.Schema(query=Query)
+class Mutation(AccountMutation, graphene.ObjectType):
+    pass
+
+
+RootSchema = graphene.Schema(
+    query=Query,
+    mutation=Mutation,
+)
