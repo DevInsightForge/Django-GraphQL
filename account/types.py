@@ -1,5 +1,8 @@
 import graphene
+
 from graphene_django import DjangoObjectType
+from django.conf import settings
+
 from account.models import User, UserInformationModel
 
 
@@ -12,6 +15,13 @@ class UserInformationType(DjangoObjectType):
         """
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
+
+    def resolve_avatar(self, info):
+        return (
+            f"{info.context.scheme}://{info.context.get_host()}{settings.MEDIA_URL}{self.avatar}"
+            if self.avatar
+            else self.avatar
+        )
 
     class Meta:
         model = UserInformationModel
@@ -27,9 +37,12 @@ class UserType(DjangoObjectType):
 
     class Meta:
         model = User
-        exclude = (
-            "password",
-            "is_superuser",
-            "chats",
-            "messages",
+        fields = (
+            "id",
+            "email",
+            "date_joined",
+            "last_login",
+            "is_staff",
+            "is_active",
+            "informations",
         )

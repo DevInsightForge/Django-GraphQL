@@ -3,7 +3,7 @@ import graphene
 from django.contrib.auth import get_user_model
 from graphene_django_cud.mutations.create import DjangoCreateMutation
 from account.models import User, UserInformationModel
-from account.types import UserType
+from account.types import UserInformationType, UserType
 from graphql_jwt.mixins import ObtainJSONWebTokenMixin
 from graphql_jwt.decorators import token_auth, login_required
 from account.forms import SignupForm
@@ -59,10 +59,13 @@ class CreateUserMutation(ObtainJSONWebTokenMixin, DjangoCreateMutation):
 
 
 class UserInformationMutation(DjangoCreateMutation):
+    userInformation = graphene.Field(UserInformationType)
+
     class Meta:
         model = UserInformationModel
         type_name = "UserInformationInput"
-        return_field_name = "updatedUserInformation"
+        return_field_name = "userInformation"
+        auto_context_fields = {"user": "user"}
         exclude_fields = (
             "id",
             "user",
@@ -74,7 +77,6 @@ class UserInformationMutation(DjangoCreateMutation):
     @classmethod
     @login_required
     def mutate(cls, root, info, input):
-        input["user"] = info.context.user
         try:
             obj, _ = cls._meta.model.objects.update_or_create(input)
             return_data = {cls._meta.return_field_name: obj}
