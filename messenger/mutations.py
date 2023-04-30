@@ -4,7 +4,6 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from messenger.models import Chat, Message
-from messenger.types import BasicChatType, ChatType, MessageType
 
 
 class NewChatMutation(DjangoCreateMutation):
@@ -28,43 +27,18 @@ class NewChatMutation(DjangoCreateMutation):
         else:
             raise GraphQLError("No participants were added!")
 
-    # @classmethod
-    # @login_required
-    # def mutate(cls, root, info, input):
-    #     user = info.context.user
-    #     print(user)
-    #     print(input)
-    #     return None
-    # try:
-    #     obj, _ = cls._meta.model.objects.update_or_create(input)
-    #     return_data = {cls._meta.return_field_name: obj}
-    #     return cls(**return_data)
-    # except Exception as e:
-    #     raise ValueError(e) from e
 
+class NewMessageMutation(DjangoCreateMutation):
+    class Meta:
+        model = Message
+        type_name = "NewMessageInput"
+        exclude_fields = ("sender",)
+        auto_context_fields = {"sender": "user"}
+        foreign_key_extras = {"chat": {"type": "ID"}}
 
-# class NewMessageMutation(DjangoCreateMutation):
-#     message = graphene.Field(MessageType)
-
-#     class Meta:
-#         model = Message
-#         type_name = "MessageInput"
-#         return_field_name = "message"
-#         fields = ("content",)
-#         # exclude_fields = ("messages",)
-#         # many_to_many_extras = {
-#         #     "participants": {
-#         #         "add": {"type": "ID"},
-#         #     },
-#         # }
-
-#     # @classmethod
-#     # @login_required
-#     # def mutate(cls, root, info, input):
-#     #     input["user"] = info.context.user
-#     #     try:
-#     #         obj, _ = cls._meta.model.objects.update_or_create(input)
-#     #         return_data = {cls._meta.return_field_name: obj}
-#     #         return cls(**return_data)
-#     #     except Exception as e:
-#     #         raise ValueError(e) from e
+    @classmethod
+    @login_required
+    def validate(cls, root, info, input):
+        print(input)
+        if not input["content"]:
+            raise GraphQLError("No message content was provided!")
