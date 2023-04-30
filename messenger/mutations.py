@@ -1,15 +1,19 @@
+import graphene
+
 from uuid import UUID
 from graphene_django_cud.mutations.create import DjangoCreateMutation
 from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from messenger.models import Chat, Message
+from messenger.types import BasicChatType, MessageType
 
 
 class NewChatMutation(DjangoCreateMutation):
+    chat = graphene.Field(BasicChatType)
+
     class Meta:
         model = Chat
-        exclude_fields = ("messages",)
 
     @classmethod
     @login_required
@@ -29,6 +33,8 @@ class NewChatMutation(DjangoCreateMutation):
 
 
 class NewMessageMutation(DjangoCreateMutation):
+    message = graphene.Field(MessageType)
+
     class Meta:
         model = Message
         type_name = "NewMessageInput"
@@ -39,6 +45,5 @@ class NewMessageMutation(DjangoCreateMutation):
     @classmethod
     @login_required
     def validate(cls, root, info, input):
-        print(input)
         if not input["content"]:
             raise GraphQLError("No message content was provided!")
