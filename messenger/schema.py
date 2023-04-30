@@ -1,5 +1,6 @@
 import graphene
 
+from messenger.mutations import NewChatMutation
 from messenger.queries import ChatListQuery, ChatQuery
 
 
@@ -10,4 +11,4 @@ class MessengerQuery(ChatListQuery, ChatQuery, graphene.ObjectType):
 
 # Mutations
 class MessengerMutation(graphene.ObjectType):
-    pass
+    newChat = NewChatMutation.Field()

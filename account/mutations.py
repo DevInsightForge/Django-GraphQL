@@ -44,6 +44,7 @@ class CreateUserMutation(ObtainJSONWebTokenMixin, DjangoCreateMutation):
         }
         raise GraphQLError(
             message="ValidationError: Failed to create new user",
+            code="INVALIDINPUT",
             extensions={"inputErrors": form_errors},
         )
 

@@ -19,5 +19,11 @@ class BasicChatType(DjangoObjectType):
 
 
 class MessageType(DjangoObjectType):
+    chat = BasicChatType
+
     class Meta:
         model = Message
+
+
+class ParticipantInput(graphene.Argument):
+    id = graphene.UUID()
