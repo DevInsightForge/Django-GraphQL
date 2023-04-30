@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = [
 # local django apps
 LOCAL_APPS = [
     "account",
+    "messenger",
 ]
 
 

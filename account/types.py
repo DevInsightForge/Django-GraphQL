@@ -30,4 +30,6 @@ class UserType(DjangoObjectType):
         exclude = (
             "password",
             "is_superuser",
+            "chats",
+            "messages",
         )

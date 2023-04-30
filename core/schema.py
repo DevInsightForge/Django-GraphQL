@@ -1,9 +1,10 @@
 import graphene
 from account.schema import AccountMutation, AccountQuery
+from messenger.schema import MessengerQuery
 
 
 # Root Schema Definitions
-class Query(AccountQuery, graphene.ObjectType):
+class Query(MessengerQuery, AccountQuery, graphene.ObjectType):
     pass
 
 
