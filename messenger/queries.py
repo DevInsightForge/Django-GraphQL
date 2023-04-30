@@ -4,12 +4,12 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 from messenger.models import Chat
 
-from messenger.types import ChatType
+from messenger.types import BasicChatType, ChatType
 
 
 class ChatListQuery(graphene.ObjectType):
     all_chats = graphene.List(
-        ChatType,
+        BasicChatType,
         description="Get all available chats.",
     )
 

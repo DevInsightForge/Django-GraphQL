@@ -9,6 +9,15 @@ class ChatType(DjangoObjectType):
         model = Chat
 
 
+class BasicChatType(DjangoObjectType):
+    class Meta:
+        model = Chat
+        exclude = (
+            "participants",
+            "messages",
+        )
+
+
 class MessageType(DjangoObjectType):
     class Meta:
         model = Message
