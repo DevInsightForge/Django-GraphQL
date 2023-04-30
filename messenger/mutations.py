@@ -6,6 +6,7 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from messenger.models import Chat, Message
+from messenger.subscriptions import OnNewChatMessage
 from messenger.types import BasicChatType, MessageType
 
 
@@ -47,3 +48,16 @@ class NewMessageMutation(DjangoCreateMutation):
     def validate(cls, root, info, input):
         if not input["content"]:
             raise GraphQLError("No message content was provided!")
+
+    @classmethod
+    def after_mutate(cls, root, info, input, obj, return_data):
+        print(
+            "data",
+            {
+                "chatroom": obj.chat.title,
+                "text": obj.content,
+                "sender": obj.sender.email,
+            },
+        )
+        # Notify subscribers.
+        OnNewChatMessage().new_chat_message(message=obj)

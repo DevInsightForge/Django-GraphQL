@@ -38,6 +38,7 @@ ALLOWED_HOSTS = ["*"]
 
 # Django built-in apps
 DJANGO_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -196,4 +197,12 @@ GRAPHQL_JWT = {
     "JWT_COOKIE_SECURE": True,
     "JWT_COOKIE_SAMESITE": "None",
     "JWT_COOKIE_NAME": "__token",
+}
+
+
+# Channels Definitions
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
 }
