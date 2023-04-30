@@ -1,10 +1,15 @@
 from django.http import HttpResponseRedirect
 from django.views import View
 
+from graphene_file_upload.django import FileUploadGraphQLView
 
-class ApolloSandbox(View):
+
+class RedirectToGraphQL(View):
     def get(self, request, *args, **kwargs):
-        gql_endpoint = f"{request.scheme}://{request.get_host()}/graphql/"
-        studio_url = "https://studio.apollographql.com/sandbox/explorer"
+        gql_endpoint = request.build_absolute_uri("/graphql/")
 
-        return HttpResponseRedirect(f"{studio_url}?endpoint={gql_endpoint}")
+        return HttpResponseRedirect(gql_endpoint)
+
+
+class GraphQLView(FileUploadGraphQLView):
+    graphiql_template = "apollo/studio.html"
