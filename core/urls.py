@@ -6,6 +6,7 @@ from django.conf import settings
 from django.urls import path
 from django.conf.urls.static import static
 from django.views.decorators.csrf import csrf_exempt
+from graphql_jwt.decorators import jwt_cookie
 
 from graphene_file_upload.django import FileUploadGraphQLView as GraphQLView
 from core.views import ApolloSandbox
@@ -13,7 +14,10 @@ from core.views import ApolloSandbox
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=settings.DEBUG))),
+    path(
+        "graphql/",
+        csrf_exempt(jwt_cookie(GraphQLView.as_view(graphiql=settings.DEBUG))),
+    ),
     path("", ApolloSandbox.as_view()),
 ]
 

@@ -151,7 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Dhaka"
 USE_I18N = True
 USE_TZ = True
 
@@ -192,14 +192,8 @@ GRAPHENE = {
 # GRAPHQL_JWT definition
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
-    "JWT_EXPIRATION_DELTA": timedelta(hours=1),
-    # "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
-    # "JWT_HIDE_TOKEN_FIELDS": True,
-    # "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-    # "JWT_REUSE_REFRESH_TOKENS": True,
-    # "JWT_COOKIE_SECURE": bool(ON_PRODUCTION),
-    # "JWT_COOKIE_SECURE": True,
-    # "JWT_COOKIE_SAMESITE": "None",
-    # "JWT_COOKIE_NAME": "__a_t",
-    # "JWT_REFRESH_TOKEN_COOKIE_NAME": "__r_t",
+    "JWT_EXPIRATION_DELTA": timedelta(days=1),
+    "JWT_COOKIE_SECURE": True,
+    "JWT_COOKIE_SAMESITE": "None",
+    "JWT_COOKIE_NAME": "__token",
 }

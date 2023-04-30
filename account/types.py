@@ -16,12 +16,11 @@ class UserInformationType(DjangoObjectType):
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
 
-    def resolve_avatar(self, info):
-        return (
-            f"{info.context.scheme}://{info.context.get_host()}{settings.MEDIA_URL}{self.avatar}"
-            if self.avatar
-            else self.avatar
-        )
+    resolve_avatar = (
+        lambda self, info: f"{info.context.scheme}://{info.context.get_host()}{settings.MEDIA_URL}{self.avatar}"
+        if self.avatar
+        else None
+    )
 
     class Meta:
         model = UserInformationModel
