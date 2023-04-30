@@ -10,7 +10,7 @@ from account.forms import SignupForm
 from graphql import GraphQLError
 
 
-class UserInformationMutation(DjangoCreateMutation):
+class ChatMutation(DjangoCreateMutation):
     class Meta:
         model = UserInformationModel
         type_name = "UserInformationInput"

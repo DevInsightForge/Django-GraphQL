@@ -1,10 +1,10 @@
 import graphene
 
-from messenger.queries import ChatQuery
+from messenger.queries import ChatListQuery, ChatQuery
 
 
 # Messenger Definitions
-class MessengerQuery(ChatQuery, graphene.ObjectType):
+class MessengerQuery(ChatListQuery, ChatQuery, graphene.ObjectType):
     pass
 
 

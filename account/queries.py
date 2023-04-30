@@ -30,10 +30,10 @@ class UserQuery(graphene.ObjectType):
 
 
 class UsersQuery(graphene.ObjectType):
-    users = graphene.List(UserType, description="Get all user's information")
+    all_users = graphene.List(UserType, description="Get all user's information")
 
     @login_required
-    def resolve_users(self, info, **kwargs):
+    def resolve_all_users(self, info, **kwargs):
         if not info.context.user.is_staff or not info.context.user.is_superuser:
             raise GraphQLError("You do not have permission to view other users")
         return User.objects.all()
