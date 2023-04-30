@@ -1,39 +1,13 @@
 import graphene
 import graphql_jwt
-from graphql import GraphQLError
-from graphql_jwt.decorators import login_required
 
-from account.models import User
 from account.mutations import CreateUserMutation, UserInformationMutation
-from account.types import UserType
+from account.queries import UserQuery, UsersQuery
 
 
 # Auth Definitions
-class AccountQuery(graphene.ObjectType):
-    user = graphene.Field(
-        UserType,
-        user_id=graphene.UUID(default_value=None),
-        description="Get user information by using user's ID. Defaults to self.",
-    )
-    users = graphene.List(UserType, description="Get all user's information")
-
-    @login_required
-    def resolve_user(self, info, **kwargs):
-        user_id = (
-            kwargs["user_id"] if kwargs["user_id"] is not None else info.context.user.id
-        )
-        if not info.context.user.is_staff or not info.context.user.is_superuser:
-            raise GraphQLError("You do not have permission to view other users")
-        try:
-            return User.objects.get(id=user_id)
-        except User.DoesNotExist as e:
-            raise GraphQLError(f"No user not found with id {user_id}!") from e
-
-    @login_required
-    def resolve_users(self, info, **kwargs):
-        if not info.context.user.is_staff or not info.context.user.is_superuser:
-            raise GraphQLError("You do not have permission to view other users")
-        return User.objects.all()
+class AccountQuery(UserQuery, UsersQuery, graphene.ObjectType):
+    pass
 
 
 # Mutations
