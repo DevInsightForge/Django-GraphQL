@@ -11,5 +11,9 @@ class MessengerQuery(ChatListQuery, ChatQuery, graphene.ObjectType):
 
 # Mutations
 class MessengerMutation(graphene.ObjectType):
-    newChat = NewChatMutation.Field()
-    sendMessage = NewMessageMutation.Field()
+    create_chat = NewChatMutation.Field(
+        description="Create a new chat with participants"
+    )
+    # deleteChat
+    send_message = NewMessageMutation.Field(description="Send message to a chat")
+    # deleteMessage

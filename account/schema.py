@@ -12,10 +12,12 @@ class AccountQuery(UserQuery, UsersQuery, graphene.ObjectType):
 
 # Mutations
 class AccountMutation(graphene.ObjectType):
-    sign_up = CreateUserMutation.Field(
+    register = CreateUserMutation.Field(
         description="Register user and obtain new JWT Token"
     )
-    sign_in = graphql_jwt.ObtainJSONWebToken.Field(description="Obtain new JWT Token")
+    login = graphql_jwt.ObtainJSONWebToken.Field(
+        description="Login user and obtain new JWT Token"
+    )
     update_user_information = UserInformationMutation.Field(
         description="Add information for user"
     )
