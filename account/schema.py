@@ -18,6 +18,9 @@ class AccountMutation(graphene.ObjectType):
     login = graphql_jwt.ObtainJSONWebToken.Field(
         description="Login user and obtain new JWT Token"
     )
+    logout = graphql_jwt.DeleteJSONWebTokenCookie.Field(
+        description="Logout user and remove JWT Token"
+    )
     update_user_information = UserInformationMutation.Field(
         description="Add information for user"
     )

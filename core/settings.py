@@ -195,6 +195,7 @@ GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
     "JWT_EXPIRATION_DELTA": timedelta(days=1),
     "JWT_COOKIE_SECURE": True,
+    "JWT_COOKIE_PATH": "/graphql/",
     "JWT_COOKIE_SAMESITE": "None",
     "JWT_COOKIE_NAME": "__token",
 }

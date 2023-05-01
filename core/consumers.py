@@ -1,5 +1,6 @@
+import asyncio
 from channels_graphql_ws import GraphqlWsConsumer
-from graphql import GraphQLError
+from django.core.exceptions import PermissionDenied
 from core.schema import RootSchema
 
 
@@ -14,7 +15,7 @@ class MyGraphqlWsConsumer(GraphqlWsConsumer):
     # Uncomment to process requests sequentially (useful for tests).
     # strict_ordering = True
 
-    async def on_connect(self, payload):
+    async def on_operation(self, *args, **kwargs):
         """New client connection handler."""
         if not self.scope["user"].is_authenticated:
-            raise GraphQLError("You do not have permission to perform this action")
+            raise PermissionDenied("You do not have permission to perform this action")
