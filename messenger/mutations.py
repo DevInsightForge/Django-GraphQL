@@ -19,18 +19,17 @@ class NewChatMutation(DjangoCreateMutation):
     @classmethod
     @login_required
     def before_mutate(cls, root, info, input):
-        if len(input["participants"]):
-            # Convert strings to UUIDv4 objects
-            participants = [
-                UUID(p) if isinstance(p, str) else p for p in input["participants"]
-            ]
-            # Insert user ID at the beginning of the participants list
-            participants.insert(0, info.context.user.id)
-            # Return updated participants list with input
-            input["participants"] = participants
-            return input
-        else:
+        if not len(input["participants"]):
             raise GraphQLError("No participants were added!")
+            # Convert strings to UUIDv4 objects
+        participants = [
+            p if isinstance(p, UUID) else UUID(p) for p in input["participants"]
+        ]
+        # Insert user ID at the beginning of the participants list
+        participants.insert(0, info.context.user.id)
+        # Return updated participants list with input
+        input["participants"] = participants
+        return input
 
 
 class NewMessageMutation(DjangoCreateMutation):
@@ -48,16 +47,12 @@ class NewMessageMutation(DjangoCreateMutation):
     def validate(cls, root, info, input):
         if not input["content"]:
             raise GraphQLError("No message content was provided!")
+        try:
+            Chat.objects.get(participants=info.context.user, id=input["chat"])
+        except Chat.DoesNotExist as e:
+            raise GraphQLError(f"No chat not found with id {input['chat']}!") from e
 
     @classmethod
     def after_mutate(cls, root, info, input, obj, return_data):
-        print(
-            "data",
-            {
-                "chatroom": obj.chat.title,
-                "text": obj.content,
-                "sender": obj.sender.email,
-            },
-        )
         # Notify subscribers.
         OnNewChatMessage().new_chat_message(message=obj)

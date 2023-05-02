@@ -1,6 +1,9 @@
 import channels_graphql_ws
 import graphene
+from graphql import GraphQLError
+from channels.db import database_sync_to_async
 
+from messenger.models import Chat
 from messenger.types import MessageType
 
 
@@ -14,12 +17,22 @@ class OnNewChatMessage(channels_graphql_ws.Subscription):
 
         chatroom = graphene.String()
 
-    def subscribe(self, info, chatroom=None):
+    async def subscribe(self, info, *args, **kwargs):
         # access auth user
-        # print(info.context.channels_scope["user"])
+        chat_id = kwargs.get("chatroom")
+        user = info.context.channels_scope["user"]
         """Client subscription handler."""
+
+        try:
+            chat = await database_sync_to_async(Chat.objects.get)(
+                participants=user, id=chat_id
+            )
+        except Chat.DoesNotExist as e:
+            raise GraphQLError(f"No chat not found with id {chat_id}!") from e
+
         # Specify the subscription group client subscribes to.
-        return [chatroom] if chatroom is not None else None
+        print(chat)
+        return [f"{chat.id}"]
 
     def publish(self, info, chatroom=None):
         """Called to prepare the subscription notification message."""
