@@ -2,6 +2,7 @@ import graphene
 
 from uuid import UUID
 from graphene_django_cud.mutations.create import DjangoCreateMutation
+from graphene_django_cud.mutations.delete import DjangoDeleteMutation
 from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
@@ -32,6 +33,22 @@ class NewChatMutation(DjangoCreateMutation):
         return input
 
 
+class DeleteChatMutation(graphene.Mutation):
+    deleted = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        try:
+            obj = Chat.objects.get(pk=kwargs["id"])
+            obj.delete()
+            return cls(deleted=True)
+        except Chat.DoesNotExist as e:
+            return cls(deleted=False)
+
+
 class NewMessageMutation(DjangoCreateMutation):
     message = graphene.Field(MessageType)
 
@@ -56,3 +73,19 @@ class NewMessageMutation(DjangoCreateMutation):
     def after_mutate(cls, root, info, input, obj, return_data):
         # Notify subscribers.
         OnNewChatMessage().new_chat_message(message=obj)
+
+
+class DeleteMessageMutation(graphene.Mutation):
+    deleted = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        try:
+            obj = Message.objects.get(pk=kwargs["id"])
+            obj.delete()
+            return cls(deleted=True)
+        except Message.DoesNotExist as e:
+            return cls(deleted=False)

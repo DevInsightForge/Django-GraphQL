@@ -1,6 +1,11 @@
 import graphene
 
-from messenger.mutations import NewChatMutation, NewMessageMutation
+from messenger.mutations import (
+    DeleteChatMutation,
+    DeleteMessageMutation,
+    NewChatMutation,
+    NewMessageMutation,
+)
 from messenger.queries import ChatListQuery, ChatQuery
 from messenger.subscriptions import OnNewChatMessage
 
@@ -15,12 +20,12 @@ class MessengerMutation(graphene.ObjectType):
     create_chat = NewChatMutation.Field(
         description="Create a new chat with participants"
     )
-    # deleteChat
+    delete_chat = DeleteChatMutation.Field(description="Delete a chat by id")
     send_message = NewMessageMutation.Field(description="Send message to a chat")
-    # deleteMessage
+    delete_message = DeleteMessageMutation.Field(description="Delete a message by id")
 
 
 class MessengerSubscription(graphene.ObjectType):
     """GraphQL subscriptions."""
 
-    on_new_chat_message = OnNewChatMessage.Field()
+    new_chat_message = OnNewChatMessage.Field()

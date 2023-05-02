@@ -31,7 +31,6 @@ class OnNewChatMessage(channels_graphql_ws.Subscription):
             raise GraphQLError(f"No chat not found with id {chat_id}!") from e
 
         # Specify the subscription group client subscribes to.
-        print(chat)
         return [f"{chat.id}"]
 
     def publish(self, info, chatroom=None):
